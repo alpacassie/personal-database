@@ -1,10 +1,10 @@
-# Reading Room
+# Personal Database
 
-A little Flask site that displays my reading list — books, essays, tweets,
-podcasts, videos — pulled **live from Supabase** and laid out as a simple
-table. Add a row to the `personal.reading` table in Supabase and it shows up
-here automatically through the public `personal.reading_room_public` view; no
-code change needed.
+A little Flask site for personal databases. Right now it displays my reading
+list — books, essays, tweets, podcasts, videos — pulled **live from Supabase**
+and laid out as a simple table. Add a row to the `personal.reading` table in
+Supabase and it shows up here automatically through the public
+`personal.reading_room_public` view; no code change needed.
 
 ## How it works (the 30-second version)
 
@@ -18,7 +18,7 @@ public reading-room view, not write to the underlying table.
 ## Run it locally
 
 ```bash
-cd reading-room
+cd personal-database
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
@@ -31,8 +31,8 @@ Then open <http://localhost:5001>.
 
 | File | What it does |
 |------|--------------|
-| `app.py` | Fetches data from Supabase and chooses which folder is open |
+| `app.py` | Fetches reading data from Supabase |
 | `templates/base.html` | The page shell (fonts, `<head>`) |
-| `templates/index.html` | The folder tabs + open sheet |
-| `static/css/style.css` | All of the cream-paper / folder styling |
+| `templates/index.html` | The reading table |
+| `static/css/style.css` | The simple table styling |
 | `vercel.json` | Config for deploying to Vercel |
