@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Cassie's personal databases." />
+    <title>Cassie's Databases</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="page" id="top">
+      <nav class="database-nav" id="databaseNav" aria-label="Databases"></nav>
+
+      <header class="page-header">
+        <div>
+          <p class="eyebrow">Cassie's database</p>
+          <h1 id="pageTitle">Reading</h1>
+        </div>
+        <p class="count"><span id="totalCount">0</span> entries</p>
+      </header>
+
+      <section class="controls" aria-label="Database controls">
+        <label class="search-field">
+          <span class="sr-only">Search database</span>
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m21 21-4.35-4.35m2.35-5.65a8 8 0 1 1-16 0 8 8 0 0 1 16 0Z" /></svg>
+          <input id="searchInput" type="search" placeholder="Search titles" autocomplete="off" />
+        </label>
+
+        <label class="sort-field">
+          <span>Sort by</span>
+          <select id="sortSelect">
+            <option value="newest">Newest</option>
+            <option value="oldest">Oldest</option>
+            <option value="az">A–Z</option>
+            <option value="za">Z–A</option>
+          </select>
+        </label>
+
+        <nav class="category-tabs" id="categoryTabs" aria-label="Filters"></nav>
+      </section>
+
+      <div class="table-wrap">
+        <table>
+          <thead id="tableHead"></thead>
+          <tbody id="tableRows"></tbody>
+        </table>
+        <div class="empty-state" id="emptyState" hidden><p>No matching entries.</p></div>
+      </div>
+
+      <footer>
+        <span id="sourceNote" aria-live="polite">Connecting to Supabase</span>
+        <button id="backToTop" type="button">Back to top</button>
+      </footer>
+    </main>
+
+    <script src="./reading-data.js"></script>
+    <script src="./collections-data.js"></script>
+    <script src="./wardrobe-data.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>
