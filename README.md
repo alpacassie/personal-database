@@ -2,6 +2,8 @@
 
 Static source for Cassie's personal database site.
 
+Live site: <https://cassies-personal-database.vercel.app/#reading>
+
 The site opens to Reading and includes tabs for Recipes, Media, Wardrobe,
 Wedding, Flowers, and Sake. It uses local fallback data files and fetches live
 public data from the alpacassie Supabase Edge Function when available.
