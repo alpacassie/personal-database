@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="title">Reading</h1>
+<p class="count">{{ total }} entries</p>
+
+<table class="reading">
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Category</th>
+      <th>Date</th>
+      <th>Notes</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for r in rows %}
+      <tr>
+        <td>
+          {% if r.link %}
+            <a href="{{ r.link }}" target="_blank" rel="noopener">{{ r.title }}</a>
+          {% else %}
+            {{ r.title }}
+          {% endif %}
+        </td>
+        <td>{{ r.category or '—' }}</td>
+        <td>{{ r.date or '' }}</td>
+        <td>{{ r.notes or '' }}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
