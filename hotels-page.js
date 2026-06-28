@@ -8,14 +8,6 @@
       && typeof getDatabaseFromHash === "function";
   }
 
-  function normalizedWeddingRows() {
-    return (window.WEDDING_DATA || []).map((row) => ({
-      ...row,
-      type: Array.isArray(row.style_tags) ? row.style_tags.join(", ") : row.region || "",
-      capacity: row.aesthetic_notes || "",
-    }));
-  }
-
   function installHotelsDatabase() {
     if (!appIsReady()) return;
 
@@ -42,14 +34,8 @@
 
     databases.hotels = window.HOTELS_DATA || [];
 
-    if (window.WEDDING_DATA) {
-      databases.wedding = normalizedWeddingRows();
-      databaseConfig.wedding.source = "Saved wedding venue data";
-    }
-
     if (typeof liveDatabaseNames !== "undefined") {
       liveDatabaseNames.delete("hotels");
-      liveDatabaseNames.delete("wedding");
     }
   }
 

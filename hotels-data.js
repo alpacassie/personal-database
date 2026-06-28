@@ -110,6 +110,16 @@ window.HOTELS_DATA = [
     created_at: "2026-06-28"
   },
   {
+    id: "kona-village-rosewood",
+    name: "Kona Village, A Rosewood Resort",
+    location: "Kailua-Kona, Hawaii, United States",
+    status: "haven't",
+    visited_on: null,
+    website: "https://www.rosewoodhotels.com/en/kona-village",
+    notes: "Big Island Rosewood resort on Kahuwai Bay.",
+    created_at: "2026-06-28"
+  },
+  {
     id: "aman-venice",
     name: "Aman Venice",
     location: "Palazzo Papadopoli, Calle Tiepolo 1364, 30125 Venice, Italy",

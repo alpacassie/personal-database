@@ -135,13 +135,14 @@ const databaseConfig = {
 
 const collectionData = window.COLLECTION_DATA || {};
 const savedWardrobeRows = window.WARDROBE_DATA || collectionData.wardrobe || [];
+const savedWeddingRows = (window.WEDDING_DATA || []).map(normalizeSavedWeddingRow);
 const databases = {
   reading: window.READING_DATA || [],
   recipes: collectionData.recipes || [],
   restaurants: collectionData.restaurants || [],
   media: collectionData.media || [],
   wardrobe: savedWardrobeRows,
-  wedding: [],
+  wedding: savedWeddingRows,
   flowers: collectionData.flowers || [],
   sake: collectionData.sake || [],
 };
@@ -218,6 +219,32 @@ function formatDate(value) {
   const date = new Date(`${String(value).slice(0, 10)}T12:00:00`);
   if (Number.isNaN(date.getTime())) return "—";
   return new Intl.DateTimeFormat("en", { month: "short", year: "numeric" }).format(date);
+}
+
+function normalizeSavedWeddingRow(row) {
+  return {
+    ...row,
+    type: Array.isArray(row.style_tags) ? row.style_tags.join(", ") : row.type || row.region || "",
+    capacity: row.capacity || row.aesthetic_notes || "",
+  };
+}
+
+function mergeSavedRows(liveRows, savedRows) {
+  const seen = new Set(liveRows.flatMap((row) => [
+    row.id && `id:${String(row.id).toLowerCase()}`,
+    row.name && `name:${String(row.name).toLowerCase()}`,
+  ]).filter(Boolean));
+
+  return [
+    ...liveRows,
+    ...savedRows.filter((row) => {
+      const keys = [
+        row.id && `id:${String(row.id).toLowerCase()}`,
+        row.name && `name:${String(row.name).toLowerCase()}`,
+      ].filter(Boolean);
+      return keys.every((key) => !seen.has(key));
+    }),
+  ];
 }
 
 const wardrobeIconColors = [
@@ -653,7 +680,7 @@ async function refreshLiveDatabase(name, { silent = false } = {}) {
     if (!response.ok) throw new Error(`Supabase returned ${response.status}`);
     const payload = await response.json();
     if (!Array.isArray(payload.rows)) throw new Error("Supabase returned an invalid response");
-    databases[name] = payload.rows;
+    databases[name] = name === "wedding" ? mergeSavedRows(payload.rows, savedWeddingRows) : payload.rows;
     liveState.fetchedAt[name] = payload.fetchedAt || new Date().toISOString();
   } catch (error) {
     console.error(`Unable to refresh ${name}`, error);
