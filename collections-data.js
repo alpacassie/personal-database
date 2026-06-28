@@ -1,13 +1,13 @@
 window.COLLECTION_DATA = {
   "restaurants": [
-    { "id": 1, "name": "Quince", "michelin": "3 stars", "location": "San Francisco, CA", "visited": "No" },
-    { "id": 2, "name": "Benu", "michelin": "3 stars", "location": "San Francisco, CA", "visited": "No" },
-    { "id": 3, "name": "Lazy Bear", "michelin": "2 stars", "location": "San Francisco, CA", "visited": "No" },
-    { "id": 4, "name": "Mister Jiu's", "michelin": "1 star", "location": "San Francisco, CA", "visited": "No" },
-    { "id": 5, "name": "Masa", "michelin": "2 stars", "location": "New York, NY", "visited": "No" },
-    { "id": 6, "name": "Eleven Madison Park", "michelin": "3 stars", "location": "New York, NY", "visited": "No" },
-    { "id": 7, "name": "Saru Sushi Bar", "michelin": "Michelin Guide", "location": "San Francisco, CA", "visited": "No" },
-    { "id": 8, "name": "Dumpling Home", "michelin": "Bib Gourmand", "location": "San Francisco, CA", "visited": "No" },
+    { "id": 1, "name": "Quince", "michelin": "3 stars", "location": "San Francisco, CA", "visited": "Yes" },
+    { "id": 2, "name": "Benu", "michelin": "3 stars", "location": "San Francisco, CA", "visited": "Yes" },
+    { "id": 3, "name": "Lazy Bear", "michelin": "2 stars", "location": "San Francisco, CA", "visited": "Yes" },
+    { "id": 4, "name": "Mister Jiu's", "michelin": "1 star", "location": "San Francisco, CA", "visited": "Yes" },
+    { "id": 5, "name": "Masa", "michelin": "2 stars", "location": "New York, NY", "visited": "Yes" },
+    { "id": 6, "name": "Eleven Madison Park", "michelin": "3 stars", "location": "New York, NY", "visited": "Yes" },
+    { "id": 7, "name": "Saru Sushi Bar", "michelin": "Michelin Guide", "location": "San Francisco, CA", "visited": "Yes" },
+    { "id": 8, "name": "Dumpling Home", "michelin": "Bib Gourmand", "location": "San Francisco, CA", "visited": "Yes" },
     { "id": 9, "name": "Hyotei", "michelin": "3 stars", "location": "Kyoto, Japan", "visited": "Yes" }
   ],
   "sake": [
