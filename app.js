@@ -1,6 +1,6 @@
-const databaseOrder = ["reading", "recipes", "media", "wardrobe", "wedding", "flowers", "sake"];
+const databaseOrder = ["reading", "recipes", "restaurants", "media", "wardrobe", "wedding", "flowers", "sake"];
 
-const liveDatabaseNames = new Set(databaseOrder);
+const liveDatabaseNames = new Set(databaseOrder.filter((name) => name !== "restaurants"));
 const liveDatabaseEndpoint = "https://dxgfcxdlxuruvdyaulfj.supabase.co/functions/v1/public-databases";
 const supabasePublishableKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR4Z2ZjeGRseHVydXZkeWF1bGZqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc1NTQ0MTgsImV4cCI6MjA4MzEzMDQxOH0.PDLsQxbE5rPOs4-IR64UYAjinihyys8ASPibMQhjJK0";
 
@@ -29,6 +29,18 @@ const databaseConfig = {
     columns: [
       { label: "Recipe", key: "name", primary: true },
       { label: "Ingredients & notes", key: "details", detail: true },
+    ],
+  },
+  restaurants: {
+    title: "Restaurants",
+    search: "Search restaurants",
+    source: "Saved restaurant list",
+    primaryKey: "name",
+    columns: [
+      { label: "Name", key: "name", primary: true },
+      { label: "Michelin", key: "michelin" },
+      { label: "Location", key: "location", detail: true },
+      { label: "Visited", key: "visited", mobile: false },
     ],
   },
   media: {
@@ -126,6 +138,7 @@ const savedWardrobeRows = window.WARDROBE_DATA || collectionData.wardrobe || [];
 const databases = {
   reading: window.READING_DATA || [],
   recipes: collectionData.recipes || [],
+  restaurants: collectionData.restaurants || [],
   media: collectionData.media || [],
   wardrobe: savedWardrobeRows,
   wedding: [],
@@ -603,7 +616,7 @@ function render() {
   const rows = preparedRows();
   document.body.dataset.database = state.database;
   tableWrap.dataset.database = state.database;
-  document.title = `${config.title} · Cassie's Databases`;
+  document.title = `${config.title} · cassie's database`;
   pageTitle.textContent = config.title;
   totalCount.textContent = rows.length;
   if (liveDatabaseNames.has(state.database)) {
