@@ -1,4 +1,4 @@
-const databaseOrder = ["reading", "recipes", "restaurants", "media", "wardrobe", "wedding", "flowers", "sake"];
+const databaseOrder = ["reading", "recipes", "media", "wardrobe", "restaurants", "wedding", "flowers", "sake"];
 
 const liveDatabaseNames = new Set(databaseOrder.filter((name) => name !== "restaurants"));
 const liveDatabaseEndpoint = "https://dxgfcxdlxuruvdyaulfj.supabase.co/functions/v1/public-databases";

@@ -19,10 +19,8 @@
   function installHotelsDatabase() {
     if (!appIsReady()) return;
 
-    if (!databaseOrder.includes("hotels")) {
-      const weddingIndex = databaseOrder.indexOf("wedding");
-      databaseOrder.splice(weddingIndex >= 0 ? weddingIndex + 1 : databaseOrder.length, 0, "hotels");
-    }
+    const reordered = ["reading", "recipes", "media", "hotels", "restaurants", "wedding", "wardrobe", "flowers", "sake"];
+    databaseOrder.splice(0, databaseOrder.length, ...reordered.filter((name) => databaseOrder.includes(name) || name === "hotels"));
 
     databaseConfig.hotels = {
       title: "Hotels",
