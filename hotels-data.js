@@ -5,6 +5,7 @@ window.HOTELS_DATA = [
     location: "Shima, Mie, Japan",
     status: "visited",
     visited_on: "2026-04-01",
+    website: "https://www.aman.com/resorts/amanemu",
     notes: "Visited April 2026. Aman resort in Ise-Shima.",
     created_at: "2026-06-28"
   },
@@ -14,6 +15,7 @@ window.HOTELS_DATA = [
     location: "Tokyo, Japan",
     status: "visited",
     visited_on: "2026-04-01",
+    website: "https://www.janu.com/hotels/janu-tokyo",
     notes: "Visited April 2026.",
     created_at: "2026-06-28"
   },
@@ -23,6 +25,7 @@ window.HOTELS_DATA = [
     location: "Tokyo, Japan",
     status: "visited",
     visited_on: "2026-04-01",
+    website: "",
     notes: "Visited April 2026. Confirm exact hotel name later.",
     created_at: "2026-06-28"
   },
@@ -32,6 +35,7 @@ window.HOTELS_DATA = [
     location: "Naples, Florida, United States",
     status: "visited",
     visited_on: "2025-10-01",
+    website: "https://www.ritzcarlton.com/en/hotels/rswrz-the-ritz-carlton-naples/overview/",
     notes: "Visited October 2025.",
     created_at: "2026-06-28"
   },
@@ -41,6 +45,7 @@ window.HOTELS_DATA = [
     location: "Tokyo, Japan",
     status: "visited",
     visited_on: "2025-09-01",
+    website: "https://hoshinoresorts.com/en/hotels/hoshinoyatokyo/",
     notes: "Visited September 2025.",
     created_at: "2026-06-28"
   },
@@ -50,6 +55,7 @@ window.HOTELS_DATA = [
     location: "Kyoto, Japan",
     status: "visited",
     visited_on: "2025-09-01",
+    website: "https://www.hotelthemitsui.com/en/kyoto/",
     notes: "Visited September 2025.",
     created_at: "2026-06-28"
   },
@@ -59,6 +65,7 @@ window.HOTELS_DATA = [
     location: "Maui, Hawaii, United States",
     status: "visited",
     visited_on: "2024-06-01",
+    website: "https://www.ritzcarlton.com/en/hotels/jhmrz-the-ritz-carlton-maui-kapalua/overview/",
     notes: "Visited June 2024.",
     created_at: "2026-06-28"
   },
@@ -68,6 +75,7 @@ window.HOTELS_DATA = [
     location: "Las Vegas, Nevada, United States",
     status: "visited",
     visited_on: null,
+    website: "https://bellagio.mgmresorts.com/en.html",
     notes: "Visited. Date not specified.",
     created_at: "2026-06-28"
   },
@@ -77,6 +85,7 @@ window.HOTELS_DATA = [
     location: "Las Vegas, Nevada, United States",
     status: "visited",
     visited_on: null,
+    website: "https://www.hilton.com/en/hotels/laswdwa-waldorf-astoria-las-vegas/",
     notes: "Visited. Date not specified.",
     created_at: "2026-06-28"
   },
@@ -86,6 +95,7 @@ window.HOTELS_DATA = [
     location: "Shanghai, China",
     status: "visited",
     visited_on: null,
+    website: "https://www.hilton.com/en/hotels/shawawa-waldorf-astoria-shanghai-on-the-bund/",
     notes: "Visited. Date not specified.",
     created_at: "2026-06-28"
   },
@@ -95,6 +105,7 @@ window.HOTELS_DATA = [
     location: "Big Sur, California, United States",
     status: "haven't",
     visited_on: null,
+    website: "https://www.ventanabigsur.com/",
     notes: "Luxury Big Sur resort saved from Google Maps.",
     created_at: "2026-06-28"
   },
@@ -104,6 +115,7 @@ window.HOTELS_DATA = [
     location: "Palazzo Papadopoli, Calle Tiepolo 1364, 30125 Venice, Italy",
     status: "haven't",
     visited_on: null,
+    website: "https://www.aman.com/hotels/aman-venice",
     notes: "Grand Canal Aman hotel in Venice.",
     created_at: "2026-06-28"
   },
@@ -113,6 +125,7 @@ window.HOTELS_DATA = [
     location: "1 Kayenta Rd, Canyon Point, Utah, United States",
     status: "haven't",
     visited_on: null,
+    website: "https://www.aman.com/resorts/amangiri",
     notes: "Desert Aman resort in southern Utah.",
     created_at: "2026-06-28"
   },
@@ -122,6 +135,7 @@ window.HOTELS_DATA = [
     location: "Ctra. d'Enderrocat, s/n, 07609 Cala Blava, Mallorca, Spain",
     status: "haven't",
     visited_on: null,
+    website: "https://caprocat.com/",
     notes: "Fortress hotel in Mallorca.",
     created_at: "2026-06-28"
   },
@@ -131,6 +145,7 @@ window.HOTELS_DATA = [
     location: "Avenue Bab Jdid, Marrakech, Morocco",
     status: "haven't",
     visited_on: null,
+    website: "https://mamounia.com/en/",
     notes: "Historic luxury hotel in Marrakech.",
     created_at: "2026-06-28"
   }
