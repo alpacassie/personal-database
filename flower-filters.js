@@ -37,6 +37,14 @@
   ];
   delete databaseConfig.flowers.filterKey;
 
+  databaseConfig.flowers.columns = [
+    { label: "Flower", key: "name", primary: true },
+    { label: "Collected", key: "displayDate" },
+    { label: "Where / note", key: "note", detail: true },
+    { label: "Tone", key: "tone", mobile: false, format: "label" },
+    { label: "Latin name", key: "latin", mobile: false, detail: true },
+  ];
+
   visibleRows = function visibleRows(rows) {
     const config = databaseConfig[state.database];
     const query = state.search.trim().toLowerCase();
