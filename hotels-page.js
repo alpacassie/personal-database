@@ -12,10 +12,58 @@
   const emptyState = document.querySelector("#emptyState");
   const sourceNote = document.querySelector("#sourceNote");
 
-  let hotelFilter = "all";
+  const state = {
+    hotels: { filter: "all" },
+    wedding: { filter: "all" },
+  };
 
-  function isHotelsPage() {
-    return window.location.hash === "#hotels";
+  const pages = {
+    hotels: {
+      title: "Hotels",
+      hash: "#hotels",
+      navAfter: "#wedding",
+      navLabel: "Hotels",
+      rows: () => window.HOTELS_DATA || [],
+      filterKey: "status",
+      allLabel: "all hotels",
+      search: "Search hotels",
+      source: "Saved hotel collection",
+      primaryKey: "name",
+      dateKey: "visited_on",
+      columns: [
+        { label: "Hotel", key: "name", primary: true },
+        { label: "Location", key: "location", detail: true },
+        { label: "Status", key: "status", format: "label" },
+        { label: "Visited", key: "visited_on", date: true, mobile: false },
+        { label: "Notes", key: "notes", detail: true, mobile: false },
+      ],
+    },
+    wedding: {
+      title: "Wedding",
+      hash: "#wedding",
+      navLabel: "Wedding",
+      rows: () => window.WEDDING_DATA || [],
+      filterKey: "status",
+      allLabel: "all statuses",
+      search: "Search venues",
+      source: "Saved wedding venue data",
+      primaryKey: "name",
+      dateKey: "created_at",
+      columns: [
+        { label: "Venue", key: "name", primary: true },
+        { label: "Location", key: "location" },
+        { label: "Style", key: "style_tags", tags: true, mobile: false },
+        { label: "Status", key: "status", format: "label" },
+        { label: "Notes", key: "aesthetic_notes", detail: true, mobile: false },
+        { label: "", key: "website", link: true },
+      ],
+    },
+  };
+
+  let rendering = false;
+
+  function currentPageName() {
+    return Object.keys(pages).find((name) => window.location.hash === pages[name].hash) || null;
   }
 
   function escapeHtml(value = "") {
@@ -28,7 +76,7 @@
   }
 
   function formatLabel(value = "") {
-    return String(value).replaceAll("_", " ");
+    return String(value).replaceAll("_", " ").replaceAll("-", " ");
   }
 
   function formatDate(value) {
@@ -38,132 +86,147 @@
     return new Intl.DateTimeFormat("en", { month: "short", year: "numeric" }).format(date);
   }
 
-  function dateScore(row) {
-    const value = row.visited_on || row.created_at;
+  function dateScore(row, config) {
+    const value = row[config.dateKey] || row.created_at;
     if (!value) return 0;
     const time = new Date(`${String(value).slice(0, 10)}T12:00:00`).getTime();
     return Number.isNaN(time) ? 0 : time;
   }
 
-  function addHotelNavLink() {
+  function addNavLinks() {
     if (!databaseNav) return;
-    let hotelLink = databaseNav.querySelector('a[href="#hotels"]');
-    if (!hotelLink) {
-      hotelLink = document.createElement("a");
-      hotelLink.className = "database-link";
-      hotelLink.href = "#hotels";
-      hotelLink.textContent = "Hotels";
-      const weddingLink = databaseNav.querySelector('a[href="#wedding"]');
-      if (weddingLink) weddingLink.after(hotelLink);
-      else databaseNav.append(hotelLink);
-    }
-
-    databaseNav.querySelectorAll(".database-link").forEach((link) => {
-      link.classList.toggle("active", isHotelsPage() && link.getAttribute("href") === "#hotels");
+    Object.entries(pages).forEach(([name, config]) => {
+      let link = databaseNav.querySelector(`a[href="${config.hash}"]`);
+      if (!link) {
+        link = document.createElement("a");
+        link.className = "database-link";
+        link.href = config.hash;
+        link.textContent = config.navLabel;
+        const anchor = config.navAfter ? databaseNav.querySelector(`a[href="${config.navAfter}"]`) : null;
+        if (anchor) anchor.after(link);
+        else databaseNav.append(link);
+      }
+      link.classList.toggle("active", currentPageName() === name);
     });
   }
 
-  function visibleHotelRows() {
+  function visibleRows(name) {
+    const config = pages[name];
+    const pageState = state[name];
     const query = searchInput.value.trim().toLowerCase();
-    const rows = window.HOTELS_DATA || [];
+    const rows = config.rows();
     const filtered = rows.filter((row) => {
-      const matchesFilter = hotelFilter === "all" || row.status === hotelFilter;
-      const matchesSearch = !query || Object.values(row).filter(Boolean).join(" ").toLowerCase().includes(query);
+      const matchesFilter = pageState.filter === "all" || row[config.filterKey] === pageState.filter;
+      const matchesSearch = !query || Object.values(row).flat().filter(Boolean).join(" ").toLowerCase().includes(query);
       return matchesFilter && matchesSearch;
     });
 
     return filtered.sort((a, b) => {
-      const nameA = String(a.name || "");
-      const nameB = String(b.name || "");
-      if (sortSelect.value === "az") return nameA.localeCompare(nameB);
-      if (sortSelect.value === "za") return nameB.localeCompare(nameA);
-      if (sortSelect.value === "oldest") return dateScore(a) - dateScore(b) || nameA.localeCompare(nameB);
-      return dateScore(b) - dateScore(a) || nameA.localeCompare(nameB);
+      const primaryA = String(a[config.primaryKey] || "");
+      const primaryB = String(b[config.primaryKey] || "");
+      if (sortSelect.value === "az") return primaryA.localeCompare(primaryB);
+      if (sortSelect.value === "za") return primaryB.localeCompare(primaryA);
+      if (sortSelect.value === "oldest") return dateScore(a, config) - dateScore(b, config) || primaryA.localeCompare(primaryB);
+      return dateScore(b, config) - dateScore(a, config) || primaryA.localeCompare(primaryB);
     });
   }
 
-  function renderHotelFilters() {
-    const rows = window.HOTELS_DATA || [];
-    const statuses = [...new Set(rows.map((row) => row.status).filter(Boolean))].sort((a, b) => {
+  function renderFilters(name) {
+    const config = pages[name];
+    const pageState = state[name];
+    const values = [...new Set(config.rows().map((row) => row[config.filterKey]).filter(Boolean))].sort((a, b) => {
       if (a === "visited") return -1;
       if (b === "visited") return 1;
       return String(a).localeCompare(String(b));
     });
-    const buttons = [{ value: "all", label: "all hotels" }, ...statuses.map((status) => ({ value: status, label: formatLabel(status) }))];
+    const buttons = [{ value: "all", label: config.allLabel }, ...values.map((value) => ({ value, label: formatLabel(value) }))];
 
     categoryTabs.hidden = false;
     categoryTabs.innerHTML = `
       <div class="filter-group">
-        <span class="filter-label">Status</span>
+        <span class="filter-label">Filter</span>
         <div class="filter-options">
-          ${buttons.map((button) => `<button class="tab ${hotelFilter === button.value ? "active" : ""}" data-hotel-status="${escapeHtml(button.value)}" type="button">${escapeHtml(button.label)}</button>`).join("")}
+          ${buttons.map((button) => `<button class="tab ${pageState.filter === button.value ? "active" : ""}" data-custom-filter="${escapeHtml(button.value)}" type="button">${escapeHtml(button.label)}</button>`).join("")}
         </div>
       </div>
     `;
   }
 
-  function renderHotels() {
-    if (!isHotelsPage()) {
-      addHotelNavLink();
-      return;
-    }
+  function renderCell(row, column, config) {
+    const raw = row[column.key];
+    const classes = [
+      column.primary ? "primary-cell" : "",
+      column.detail ? "detail-cell" : "",
+      column.date ? "date-cell" : "",
+      column.mobile === false ? "hide-mobile" : "",
+    ].filter(Boolean).join(" ");
 
-    const rows = visibleHotelRows();
-    document.body.dataset.database = "hotels";
-    tableWrap.dataset.database = "hotels";
+    if (column.link) {
+      return `<td>${raw ? `<a class="open-link" href="${escapeHtml(raw)}" target="_blank" rel="noreferrer" aria-label="Open ${escapeHtml(row[config.primaryKey])}">↗</a>` : `<span class="no-link-mark">—</span>`}</td>`;
+    }
+    if (column.tags) {
+      const tags = Array.isArray(raw) ? raw : [];
+      return `<td class="tag-cell ${column.mobile === false ? "hide-mobile" : ""}"><div class="tag-list">${tags.map((tag) => `<span>${escapeHtml(formatLabel(tag))}</span>`).join("")}</div></td>`;
+    }
+    const value = column.date ? formatDate(raw) : column.format === "label" ? formatLabel(raw || "—") : raw || "—";
+    return `<td class="${classes}">${escapeHtml(value)}</td>`;
+  }
+
+  function renderCustomPage(force = false) {
+    const name = currentPageName();
+    addNavLinks();
+    if (!name || rendering) return;
+
+    const config = pages[name];
+    const rows = visibleRows(name);
+    const alreadyRendered = document.body.dataset.database === name && pageTitle.textContent === config.title;
+    if (!force && alreadyRendered && Number(totalCount.textContent) === rows.length) return;
+
+    rendering = true;
+    document.body.dataset.database = name;
+    tableWrap.dataset.database = name;
     tableWrap.classList.remove("wardrobe-board-wrap");
     tableElement.hidden = false;
-    document.title = "Hotels · Cassie's Databases";
-    pageTitle.textContent = "Hotels";
+    document.title = `${config.title} · Cassie's Databases`;
+    pageTitle.textContent = config.title;
     totalCount.textContent = rows.length;
-    searchInput.placeholder = "Search hotels";
-    sourceNote.textContent = "Saved hotel collection";
+    searchInput.placeholder = config.search;
+    sourceNote.textContent = config.source;
 
-    addHotelNavLink();
-    renderHotelFilters();
-
-    tableHead.innerHTML = `
-      <tr>
-        <th scope="col">Hotel</th>
-        <th scope="col">Location</th>
-        <th scope="col">Status</th>
-        <th class="hide-mobile" scope="col">Visited</th>
-        <th class="hide-mobile" scope="col">Notes</th>
-      </tr>
-    `;
-
+    renderFilters(name);
+    tableHead.innerHTML = `<tr>${config.columns.map((column) => `<th class="${column.mobile === false ? "hide-mobile" : ""}" scope="col">${escapeHtml(column.label)}</th>`).join("")}</tr>`;
     emptyState.hidden = rows.length > 0;
-    tableRows.innerHTML = rows.map((row) => `
-      <tr>
-        <td class="primary-cell">${escapeHtml(row.name || "—")}</td>
-        <td class="detail-cell">${escapeHtml(row.location || "—")}</td>
-        <td>${escapeHtml(formatLabel(row.status || "—"))}</td>
-        <td class="date-cell hide-mobile">${escapeHtml(formatDate(row.visited_on))}</td>
-        <td class="detail-cell hide-mobile">${escapeHtml(row.notes || "—")}</td>
-      </tr>
-    `).join("");
+    tableRows.innerHTML = rows.map((row) => `<tr>${config.columns.map((column) => renderCell(row, column, config)).join("")}</tr>`).join("");
+    rendering = false;
   }
 
   window.addEventListener("hashchange", () => {
-    addHotelNavLink();
-    if (isHotelsPage()) {
-      hotelFilter = "all";
-      searchInput.value = "";
-      renderHotels();
-    }
+    const name = currentPageName();
+    addNavLinks();
+    if (!name) return;
+    state[name].filter = "all";
+    searchInput.value = "";
+    setTimeout(() => renderCustomPage(true), 0);
+    setTimeout(() => renderCustomPage(true), 250);
+    setTimeout(() => renderCustomPage(true), 900);
   });
 
-  searchInput.addEventListener("input", renderHotels);
-  sortSelect.addEventListener("change", renderHotels);
-
+  searchInput.addEventListener("input", () => renderCustomPage(true));
+  sortSelect.addEventListener("change", () => renderCustomPage(true));
   categoryTabs.addEventListener("click", (event) => {
-    const button = event.target.closest("[data-hotel-status]");
-    if (!button || !isHotelsPage()) return;
-    hotelFilter = button.dataset.hotelStatus;
-    renderHotels();
+    const name = currentPageName();
+    const button = event.target.closest("[data-custom-filter]");
+    if (!name || !button) return;
+    state[name].filter = button.dataset.customFilter;
+    renderCustomPage(true);
   });
 
-  addHotelNavLink();
-  if (isHotelsPage()) renderHotels();
-  else setTimeout(addHotelNavLink, 0);
+  const observer = new MutationObserver(() => {
+    if (!currentPageName() || rendering) return;
+    setTimeout(() => renderCustomPage(true), 0);
+  });
+  observer.observe(document.body, { childList: true, subtree: true });
+
+  addNavLinks();
+  renderCustomPage(true);
 })();
