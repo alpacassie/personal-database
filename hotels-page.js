@@ -33,9 +33,10 @@
       columns: [
         { label: "Hotel", key: "name", primary: true },
         { label: "Location", key: "location", detail: true },
-        { label: "Status", key: "status", format: "label" },
+        { label: "Status", key: "status", format: "label", mobile: false },
         { label: "Visited", key: "visited_on", date: true, mobile: false },
         { label: "Notes", key: "notes", detail: true, mobile: false },
+        { label: "", key: "website", link: true },
       ],
     },
     wedding: {
